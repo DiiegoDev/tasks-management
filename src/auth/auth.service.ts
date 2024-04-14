@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { IUserRepsoitory } from 'src/repositories/users.repository';
+import { PrismaUserRepository } from 'src/database/prisma/repositories/prisma-users.repositoy';
 import { User } from 'src/users/entities/user.entity';
 
 interface LoginProps {
@@ -20,15 +20,11 @@ interface GoogleUserProps {
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: IUserRepsoitory,
+    private userRepository: PrismaUserRepository,
     private jwtService: JwtService,
   ) {}
   async login(data: LoginProps) {
-    const payload = { email: data.email, sub: data.id };
-
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    return this.tokenJwt(data.email, data.id);
   }
 
   async validateUser(email: string, password: string) {
@@ -58,16 +54,16 @@ export class AuthService {
         picture: user.picture,
       });
 
-      const data = await this.userRepository.create(newUser);
+      await this.userRepository.create(newUser);
 
-      const payload = { email: data.email, sub: data.id };
-
-      return {
-        access_token: this.jwtService.sign(payload),
-      };
+      return this.tokenJwt(newUser.email, newUser.id);
     }
 
-    const payload = { email: userExist.email, sub: userExist.id };
+    return this.tokenJwt(userExist.email, userExist.id);
+  }
+
+  tokenJwt(email: string, sub: string) {
+    const payload = { email, sub };
 
     return {
       access_token: this.jwtService.sign(payload),

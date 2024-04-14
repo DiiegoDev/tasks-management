@@ -1,34 +1,42 @@
-import { ITasksRepository } from 'src/repositories/tasks.repository';
 import { Task } from 'src/tasks/entities/task.entity';
+import { Task as PrismaTask } from '@prisma/client';
 import { PrismaTasksMapper } from '../mappers/prisma-tasks.mapper';
 import { PrismaService } from '../prisma.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class PrismaTasksRepository implements ITasksRepository {
+export class PrismaTasksRepository {
   constructor(private prisma: PrismaService) {}
-  async getOneTask(taskId: string): Promise<any> {
+
+  async create(data: Task): Promise<void> {
+    const task = PrismaTasksMapper.toPrisma(data);
+
+    await this.prisma.task.create({ data: task });
+  }
+
+  async findOne(taskId: string): Promise<PrismaTask> {
     const task = await this.prisma.task.findUnique({ where: { id: taskId } });
 
-    //return PrismaTasksMapper.toDomain(task);
     return task;
   }
 
-  async updateTaskStatus(taskId: string, data: Task): Promise<void> {
-    await this.prisma.task.update({ where: { id: taskId }, data });
-  }
-
-  async getTasksByUser(userId: string): Promise<any> {
+  async findMany(userId: string): Promise<PrismaTask[]> {
     const tasks = await this.prisma.task.findMany({ where: { userId } });
 
     return tasks;
   }
 
-  async create(data: Task): Promise<any> {
+  async update(taskId: string, data: Task): Promise<void> {
     const task = PrismaTasksMapper.toPrisma(data);
 
-    const response = await this.prisma.task.create({ data: task });
+    await this.prisma.task.update({ where: { id: taskId }, data: task });
+  }
 
-    return PrismaTasksMapper.toDomain(response);
+  async deleteOne(taskId: string): Promise<void> {
+    await this.prisma.task.delete({ where: { id: taskId } });
+  }
+
+  async deleteMany(userId: string): Promise<void> {
+    await this.prisma.task.deleteMany({ where: { userId, status: 'Done' } });
   }
 }

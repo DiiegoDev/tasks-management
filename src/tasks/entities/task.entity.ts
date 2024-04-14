@@ -1,30 +1,16 @@
 import { randomUUID } from 'crypto';
 
-export enum Type {
-  Feature = 'Feature',
-  Bug = 'Bug',
-  Doc = 'Doc',
-}
-
-export enum Status {
-  Todo = 'Todo',
-  InProgress = 'In Progress',
-  Done = 'Done',
-}
-
-export enum Priority {
-  Low = 'Low',
-  Medium = 'Medium',
-  High = 'High',
-}
+// export type Status = 'Todo' | 'In Progress' | 'Done';
+// export type Priority = 'Low' | 'Medium' | 'High';
+// export type Label = 'Feature' | 'Bug' | 'Doc';
 
 interface Props {
   id?: string;
   userId: string;
   title: string;
-  type: Type;
-  status: Status;
-  priority: Priority;
+  label: string;
+  status: string;
+  priority: string;
   dueDate: Date;
   createdAt?: Date;
   updatedAt?: Date | null;
@@ -53,20 +39,20 @@ export class Task {
     return this.props.userId;
   }
 
-  public get type(): Type {
-    return this.props.type;
+  public get label(): string {
+    return this.props.label;
   }
 
-  public set status(status: Status) {
+  public set status(status: string) {
     this.props.status = status;
     this.update();
   }
 
-  public get status(): Status {
+  public get status(): string {
     return this.props.status;
   }
 
-  public get priority(): Priority {
+  public get priority(): string {
     return this.props.priority;
   }
 

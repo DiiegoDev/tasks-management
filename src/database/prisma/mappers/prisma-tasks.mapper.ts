@@ -1,4 +1,4 @@
-import { Priority, Status, Task, Type } from 'src/tasks/entities/task.entity';
+import { Task } from 'src/tasks/entities/task.entity';
 import { Task as PrismaTask } from '@prisma/client';
 
 export class PrismaTasksMapper {
@@ -6,7 +6,7 @@ export class PrismaTasksMapper {
     return {
       id: data.id,
       title: data.title,
-      type: data.type,
+      label: data.label,
       status: data.status,
       priority: data.priority,
       dueDate: data.dueDate,
@@ -17,12 +17,6 @@ export class PrismaTasksMapper {
   }
 
   static toDomain(data: PrismaTask) {
-    const task = {
-      ...data,
-      type: Type[data.type],
-      status: Status[data.status],
-      priority: Priority[data.priority],
-    };
-    return new Task(task);
+    return new Task(data);
   }
 }

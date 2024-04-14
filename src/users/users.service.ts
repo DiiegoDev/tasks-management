@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-
-import { IUserRepsoitory } from 'src/repositories/users.repository';
 import { User } from './entities/user.entity';
 import { UserAlreadExist } from './errors/users.errors';
+import { PrismaUserRepository } from 'src/database/prisma/repositories/prisma-users.repositoy';
 
 @Injectable()
 export class UsersService {
-  constructor(private userRepository: IUserRepsoitory) {}
+  constructor(private userRepository: PrismaUserRepository) {}
 
-  async create(request: CreateUserDto) {
+  async create(request: CreateUserDto): Promise<void> {
     const newUser = new User(request);
 
     const emailAlreadyExist = await this.userRepository.findByEmail(
@@ -18,8 +17,6 @@ export class UsersService {
 
     if (emailAlreadyExist) throw new UserAlreadExist();
 
-    const response = await this.userRepository.create(newUser);
-
-    return response;
+    await this.userRepository.create(newUser);
   }
 }

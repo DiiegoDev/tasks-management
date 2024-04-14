@@ -1,39 +1,42 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { ITasksRepository } from 'src/repositories/tasks.repository';
-import { Priority, Status, Task, Type } from './entities/task.entity';
+import { Task } from './entities/task.entity';
+import { PrismaTasksRepository } from 'src/database/prisma/repositories/prisma-tasks.repository';
 
 @Injectable()
 export class TasksService {
-  constructor(private tasksRepository: ITasksRepository) {}
-  async create(data: CreateTaskDto) {
+  constructor(private tasksRepository: PrismaTasksRepository) {}
+
+  async createTask(data: CreateTaskDto): Promise<void> {
     const task = new Task({
       ...data,
       dueDate: new Date(),
-      type: Type[data.type],
-      status: Status[data.status],
-      priority: Priority[data.priority],
     });
 
     return await this.tasksRepository.create(task);
   }
 
-  async getTasksByUser(userId: string) {
-    return await this.tasksRepository.getTasksByUser(userId);
+  async findTasksByUser(userId: string) {
+    return await this.tasksRepository.findMany(userId);
   }
 
-  async updateTaskStatus(taskId: string, status: Status) {
-    const task = await this.tasksRepository.getOneTask(taskId);
+  async updateTaskStatus(taskId: string, status: string): Promise<void> {
+    const task = await this.tasksRepository.findOne(taskId);
 
     if (!task)
       throw new HttpException('Tarefa não encontrada', HttpStatus.NOT_FOUND);
 
     const updatedTask = new Task(task);
-    updatedTask.status = Status[status];
-    // await this.tasksRepository.updateTaskStatus(taskId, updatedTask);
+    updatedTask.status = status;
 
-    console.log(updatedTask);
+    await this.tasksRepository.update(taskId, updatedTask);
+  }
 
-    return updatedTask;
+  async deleteTask(taskId: string): Promise<void> {
+    await this.tasksRepository.deleteOne(taskId);
+  }
+
+  async deleteAllDoneTasks(userId: string) {
+    await this.tasksRepository.deleteMany(userId);
   }
 }

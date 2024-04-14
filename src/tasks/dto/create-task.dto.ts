@@ -1,10 +1,10 @@
-import { Priority, Status, Type } from '../entities/task.entity';
+//import { Priority, Status, Label } from '../entities/task.entity';
 
 export class CreateTaskDto {
   userId: string;
   title: string;
-  type: Type;
-  status: Status;
-  priority: Priority;
+  label: string;
+  status: string;
+  priority: string;
   dueDate?: Date;
 }
