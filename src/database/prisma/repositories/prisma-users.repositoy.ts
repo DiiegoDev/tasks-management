@@ -8,6 +8,12 @@ import { PrismaUsersMapper } from '../mappers/prisma-users.mapper';
 export class PrismaUserRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findById(userId: string): Promise<PrismaUser> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    return user;
+  }
+
   async findByEmail(email: string): Promise<PrismaUser> {
     const response = await this.prisma.user.findUnique({
       where: {

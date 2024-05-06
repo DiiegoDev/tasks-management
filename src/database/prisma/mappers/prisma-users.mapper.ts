@@ -7,7 +7,6 @@ export class PrismaUsersMapper {
       id: data.id,
       name: data.name,
       email: data.email,
-      googleId: data.googleId,
       picture: data.picture,
       password: data.password,
       createdAt: data.createdAt,

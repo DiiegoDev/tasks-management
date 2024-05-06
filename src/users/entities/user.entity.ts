@@ -6,9 +6,8 @@ interface Props {
   id?: string;
   name: string;
   email: string;
-  googleId?: OptionalField;
+  password: string;
   picture?: OptionalField;
-  password?: OptionalField;
   createdAt?: Date;
 }
 
@@ -20,9 +19,8 @@ export class User {
       id: _props.id ?? randomUUID(),
       name: _props.name,
       email: _props.email,
-      googleId: _props.googleId ?? null,
       picture: _props.picture ?? null,
-      password: _props.password ?? null,
+      password: _props.password,
       createdAt: _props.createdAt ?? new Date(),
     };
   }
@@ -39,15 +37,11 @@ export class User {
     return this.props.email;
   }
 
-  get googleId(): OptionalField {
-    return this.props.googleId;
-  }
-
   get picture(): OptionalField {
     return this.props.picture;
   }
 
-  get password(): OptionalField {
+  get password(): string {
     return this.props.password;
   }
 
