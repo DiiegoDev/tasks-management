@@ -1,9 +1,5 @@
 import { randomUUID } from 'crypto';
 
-// export type Status = 'Not started' | 'In Progress' | 'Done';
-// export type Priority = 'Low' | 'Medium' | 'High';
-// export type Label = 'Feature' | 'Bug' | 'Doc';
-
 interface Props {
   id?: string;
   userId: string;
@@ -14,6 +10,14 @@ interface Props {
   dueDate: Date;
   createdAt?: Date;
   updatedAt?: Date | null;
+}
+
+interface UpdatedTaks {
+  title?: string;
+  label?: string;
+  status?: string;
+  priority?: string;
+  dueDate?: Date;
 }
 
 export class Task {
@@ -68,11 +72,11 @@ export class Task {
     return this.props.updatedAt;
   }
 
-  public update() {
+  public update(): void {
     this.props.updatedAt = new Date();
   }
 
-  public updateTask(data) {
+  public updateTask(data: UpdatedTaks): void {
     this.props = {
       ...this.props,
       ...data,

@@ -25,6 +25,7 @@ export class TasksService {
       throw new HttpException('Tarefa não encontrada', HttpStatus.NOT_FOUND);
 
     const updatedTask = new Task(task);
+
     updatedTask.updateTask(data);
     updatedTask.update();
 
