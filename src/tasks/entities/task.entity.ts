@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 
-// export type Status = 'Todo' | 'In Progress' | 'Done';
+// export type Status = 'Not started' | 'In Progress' | 'Done';
 // export type Priority = 'Low' | 'Medium' | 'High';
 // export type Label = 'Feature' | 'Bug' | 'Doc';
 
@@ -70,5 +70,12 @@ export class Task {
 
   public update() {
     this.props.updatedAt = new Date();
+  }
+
+  public updateTask(data) {
+    this.props = {
+      ...this.props,
+      ...data,
+    };
   }
 }

@@ -29,12 +29,12 @@ export class TasksController {
   }
 
   @Put('/task/update/:taskId')
-  async updateTaskStatus(
+  async updateTask(
     @Body() request: UpdateTaskDto,
     @Param('taskId') taskId: string,
   ) {
     console.log(taskId);
-    return await this.tasksService.updateTaskStatus(taskId, request.status);
+    return await this.tasksService.updateTask(taskId, request);
   }
 
   @Delete('/task/delete/:taskId')

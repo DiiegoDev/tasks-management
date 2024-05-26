@@ -1,5 +1,9 @@
 //import { Status } from '../entities/task.entity';
 
 export interface UpdateTaskDto {
-  status: string;
+  title?: string;
+  label?: string;
+  status?: string;
+  priority?: string;
+  dueDate?: string;
 }

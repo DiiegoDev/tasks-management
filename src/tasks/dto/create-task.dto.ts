@@ -4,7 +4,6 @@ export class CreateTaskDto {
   userId: string;
   title: string;
   label: string;
-  status: string;
   priority: string;
-  dueDate?: Date;
+  dueDate: Date;
 }

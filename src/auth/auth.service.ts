@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaUserRepository } from 'src/database/prisma/repositories/prisma-users.repositoy';
+import * as bcrypt from 'bcrypt';
 
 interface LoginProps {
   id: string;
@@ -23,8 +24,9 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.userRepository.findByEmail(email);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    if (user && user.password === password)
+    if (user && isMatch)
       return {
         id: user.id,
         name: user.name,
