@@ -7,6 +7,6 @@ COPY . .
 RUN npm install --quit --no-optional --no-fund --loglevel=error
 RUN npm run build
 
-EXPOSE 5000
+EXPOSE 443
 
 CMD ["npm", "run", "start:prod"]
