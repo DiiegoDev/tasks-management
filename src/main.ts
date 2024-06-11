@@ -8,6 +8,6 @@ async function bootstrap() {
     allowedHeaders: ['Authorization', 'Content-Type'],
     credentials: true,
   });
-  await app.listen(5000);
+  await app.listen(443);
 }
 bootstrap();
